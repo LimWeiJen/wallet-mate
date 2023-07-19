@@ -11,7 +11,21 @@ userRouter.use((req, res, next) => {
   next()
 })
 
-userRouter.post('/sign-in', (req, res) => {
+userRouter.post('/sign-in', async (req, res) => {
+  const { username, password } = req.body;
+
+  await client.connect();
+  const users = client.db("database").collection("users");
+  const user = await users.findOne({ username });
+  
+  if (user && user.password === password) {
+    const token = jwt.sign({username, password}, process.env.JWT_SECRET!);
+    return res.status(200).json({ success: true, token });
+  }
+
+  if (!user) return res.json({ success: false, status: 404 });
+  
+  return res.json({ success: false, status: 401 });
 })
 
 userRouter.post('/sign-out', (req, res) => {
@@ -27,16 +41,15 @@ userRouter.post('/sign-up', async (req, res) => {
 
   let duplicatedUsernames = false;
   usernames.forEach(uname => {
-    if (uname.name === username) {
-      duplicatedUsernames = true;
-    }
+    if (uname.name === username) duplicatedUsernames = true;
   })
   if (duplicatedUsernames) return res.json({ success: false, status: 409 });
+
   await db.collection("usernames").insertOne({ name: username });
   await users.insertOne({ username, name, password });
   await client.close();
 
-  const token = jwt.sign({username, name, password}, process.env.JWT_SECRET!);
+  const token = jwt.sign({username, password}, process.env.JWT_SECRET!);
 
   return res.status(200).json({ success: true, token });
 })

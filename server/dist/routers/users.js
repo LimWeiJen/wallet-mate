@@ -22,8 +22,19 @@ dotenv_1.default.config();
 userRouter.use((req, res, next) => {
     next();
 });
-userRouter.post('/sign-in', (req, res) => {
-});
+userRouter.post('/sign-in', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = req.body;
+    yield database_1.client.connect();
+    const users = database_1.client.db("database").collection("users");
+    const user = yield users.findOne({ username });
+    if (user && user.password === password) {
+        const token = jsonwebtoken_1.default.sign({ username, password }, process.env.JWT_SECRET);
+        return res.status(200).json({ success: true, token });
+    }
+    if (!user)
+        return res.json({ success: false, status: 404 });
+    return res.json({ success: false, status: 401 });
+}));
 userRouter.post('/sign-out', (req, res) => {
 });
 userRouter.post('/sign-up', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,16 +45,15 @@ userRouter.post('/sign-up', (req, res) => __awaiter(void 0, void 0, void 0, func
     const usernames = yield db.collection("usernames").find({}).toArray();
     let duplicatedUsernames = false;
     usernames.forEach(uname => {
-        if (uname.name === username) {
+        if (uname.name === username)
             duplicatedUsernames = true;
-        }
     });
     if (duplicatedUsernames)
         return res.json({ success: false, status: 409 });
     yield db.collection("usernames").insertOne({ name: username });
     yield users.insertOne({ username, name, password });
     yield database_1.client.close();
-    const token = jsonwebtoken_1.default.sign({ username, name, password }, process.env.JWT_SECRET);
+    const token = jsonwebtoken_1.default.sign({ username, password }, process.env.JWT_SECRET);
     return res.status(200).json({ success: true, token });
 }));
 exports.default = userRouter;
