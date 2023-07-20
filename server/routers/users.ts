@@ -19,12 +19,12 @@ userRouter.post('/sign-in', async (req, res) => {
   const user = await users.findOne({ username });
   
   if (user && user.password === password) {
-    const token = jwt.sign({username, password}, process.env.JWT_SECRET!);
+    const token = jwt.sign({username}, process.env.JWT_SECRET!);
     return res.status(200).json({ success: true, token });
   }
 
   if (!user) return res.json({ success: false, status: 404 });
-  
+
   return res.json({ success: false, status: 401 });
 })
 
@@ -49,7 +49,7 @@ userRouter.post('/sign-up', async (req, res) => {
   await users.insertOne({ username, name, password });
   await client.close();
 
-  const token = jwt.sign({username, password}, process.env.JWT_SECRET!);
+  const token = jwt.sign({username}, process.env.JWT_SECRET!);
 
   return res.status(200).json({ success: true, token });
 })
