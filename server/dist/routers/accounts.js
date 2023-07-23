@@ -14,12 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = require("../database");
-const transactionRouter = express_1.default.Router();
+const accountRouter = express_1.default.Router();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// middleware that is specific to this router
-transactionRouter.use((req, res, next) => {
+accountRouter.use((req, res, next) => {
     var _a;
     const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
     if (!token)
@@ -31,47 +30,57 @@ transactionRouter.use((req, res, next) => {
         next();
     });
 });
-transactionRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+accountRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body.decoded.username;
-    const transaction = req.body.transaction;
-    if (!transaction)
+    const account = req.body.account;
+    if (!account)
         return res.json({ success: false, status: 400 });
     if (!username)
         return res.json({ success: false, status: 500 });
     yield database_1.client.connect();
     const db = database_1.client.db("database").collection("users");
-    yield db.updateOne({ username }, { $push: {
-            transactions: transaction
-        } });
+    yield db.updateOne({ username }, { $push: { accounts: account } });
     yield database_1.client.close();
     return res.json({ success: true });
 }));
-transactionRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+accountRouter.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body.decoded.username;
-    if (!username)
-        return res.json({ success: false, status: 500 });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    const user = yield db.findOne({ username });
-    if (!user)
-        return res.json({ success: false, status: 500 });
-    return res.json({ success: true, transactions: user.transactions });
-}));
-transactionRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.decoded.username;
-    const transactionIndex = req.body.transactionIndex;
-    if (!username)
-        return res.json({ success: false, status: 500 });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    const user = yield db.findOne({ username });
-    if (!user)
-        return res.json({ success: false, status: 500 });
-    let transactions = user.transactions;
-    if (!transactions)
+    const account = req.body.account;
+    const index = req.body.index;
+    if (!account)
         return res.json({ success: false, status: 400 });
-    transactions.splice(transactionIndex, 1);
-    yield db.updateOne({ _id: user._id }, { $set: { transactions } });
+    if (!username)
+        return res.json({ success: false, status: 500 });
+    yield database_1.client.connect();
+    const db = database_1.client.db("database").collection("users");
+    const user = yield db.findOne({ username });
+    const accounts = user === null || user === void 0 ? void 0 : user.accounts;
+    if (!accounts)
+        return res.json({ success: false, status: 500 });
+    const newAccounts = [
+        ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(0, index),
+        account,
+        ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(index + 1)
+    ];
+    yield db.updateOne({ username }, { $set: { accounts: newAccounts } });
+    yield database_1.client.close();
     return res.json({ success: true });
 }));
-exports.default = transactionRouter;
+accountRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const username = req.body.decoded.username;
+    const accountIndex = req.body.accountIndex;
+    if (!username)
+        return res.json({ success: false, status: 500 });
+    yield database_1.client.connect();
+    const db = database_1.client.db("database").collection("users");
+    const user = yield db.findOne({ username });
+    if (!user)
+        return res.json({ success: false, status: 500 });
+    let accounts = user.accounts;
+    if (!accounts)
+        return res.json({ success: false, status: 400 });
+    accounts.splice(accountIndex, 1);
+    yield db.updateOne({ _id: user._id }, { $set: { accounts } });
+    return res.json({ success: true });
+}));
+exports.default = accountRouter;
