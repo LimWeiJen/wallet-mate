@@ -62,6 +62,7 @@ userRouter.delete('/', async (req, res) => {
   await client.connect();
   const users = client.db("database").collection("users");
   await users.deleteOne({ username, password });
+  await client.db("database").collection("usernames").deleteOne({ name: username });
 
   return res.json(({ success: true }));
 })

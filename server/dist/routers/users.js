@@ -62,6 +62,7 @@ userRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
     yield database_1.client.connect();
     const users = database_1.client.db("database").collection("users");
     yield users.deleteOne({ username, password });
+    yield database_1.client.db("database").collection("usernames").deleteOne({ name: username });
     return res.json(({ success: true }));
 }));
 exports.default = userRouter;
