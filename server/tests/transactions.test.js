@@ -3,17 +3,16 @@ const { server } = require('../dist/index.js')
 const { expect } = require('chai');
 
 describe('Transaction API', () => {
-  let token;
-
-  before(() => {
-    // Assuming you have a login endpoint and it returns a token
-    request(server)
-      .post('/users/sign-in')
-      .send({ username: 'test', password: 'test' })
-      .then(res => token = res.body.token);
-  });
+  var token;
 
   it('should post a transaction', async () => {
+    await request(server)
+        .post('/users/sign-in')
+        .send({ username: 'test', password: 'test' })
+        .then(res => {
+          token = res.body.token;
+        });
+
     const res = await request(server)
       .post('/transactions')
       .set('Authorization', `Bearer ${token}`)
@@ -28,7 +27,7 @@ describe('Transaction API', () => {
       .set('Authorization', `Bearer ${token}`);
     expect(res.statusCode).to.equal(200);
     expect(res.body.success).to.equal(true);
-    expect(Array.isArray(res.body.transactions)).toBe(true);
+    expect(Array.isArray(res.body.transactions)).to.equal(true);
   });
 
   it('should delete a transaction', async () => {
