@@ -18,6 +18,23 @@ accountRouter.use((req, res, next) => {
 	})
 })
 
+accountRouter.get('/', async (req, res) => {
+	const username = req.body.decoded.username;
+	if (!username) return res.json({ success: false, status: 500 });
+
+	await client.connect();
+	const db = client.db("database").collection("users");
+
+	const user: User | null = await db.findOne({ username });
+
+	if (!user) return res.json({ success: false, status: 500 });
+
+	const accounts = user.accounts;
+
+	await client.close();
+	return res.json({success: true, accounts});
+})
+
 accountRouter.post('/', async (req, res) => {
 	const username = req.body.decoded.username;
 	const account: Account = req.body.account;

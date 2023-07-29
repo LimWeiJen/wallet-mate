@@ -13,8 +13,6 @@ export interface Account {
 	color: string
 	accountType: string
 	startingAmount: number
-	incomeByMonth: Array<number>
-	expensesByMonth: Array<number>
 }
 
 export interface User {

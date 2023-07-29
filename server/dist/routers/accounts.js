@@ -30,6 +30,19 @@ accountRouter.use((req, res, next) => {
         next();
     });
 });
+accountRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const username = req.body.decoded.username;
+    if (!username)
+        return res.json({ success: false, status: 500 });
+    yield database_1.client.connect();
+    const db = database_1.client.db("database").collection("users");
+    const user = yield db.findOne({ username });
+    if (!user)
+        return res.json({ success: false, status: 500 });
+    const accounts = user.accounts;
+    yield database_1.client.close();
+    return res.json({ success: true, accounts });
+}));
 accountRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body.decoded.username;
     const account = req.body.account;
@@ -62,6 +75,7 @@ accountRouter.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, fu
         account,
         ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(index + 1)
     ];
+    console.log(newAccounts);
     yield db.updateOne({ username }, { $set: { accounts: newAccounts } });
     yield database_1.client.close();
     return res.json({ success: true });
