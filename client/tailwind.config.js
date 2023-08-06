@@ -13,7 +13,8 @@ module.exports = {
         primaryBlack: '#181818',
         secondaryBlack: '#1E1E1E',
         primaryWhite: '#CBE4DE',
-        primaryGreen: '#538787'
+        primaryGreen: '#538787',
+        secondaryGreen: '#223D3D',
       },
     },
   },
