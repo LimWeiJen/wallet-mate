@@ -1,6 +1,10 @@
+'use client'
+
 import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Plus, LogOut, Home, CreditCard, BarChart2, Archive } from 'react-feather'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -15,6 +19,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname().toString().replace('/main/', '');
+
   return (
     <div lang="en">
       <div>
@@ -32,10 +38,18 @@ export default function RootLayout({
       <div className='grid place-content-center'>
         <div className='w-[calc(100vw-20rem)] rounded-lg h-96' >
           <div className='flex z-10'>
-            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg bg-primaryGreen`}><Home className='mr-2' /> Home</div>
-            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg opacity-50 bg-secondaryBlack`}><CreditCard className='mr-2' /> Accounts</div>
-            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg opacity-50 bg-secondaryBlack`}><BarChart2 className='mr-2' /> Reports</div>
-            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg opacity-50 bg-secondaryBlack`}><Archive className='mr-2' /> Records</div>
+            <Link href={'/main/home'}>
+            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'home' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Home className='mr-2' /> Home</div>
+            </Link>
+            <Link href={'/main/accounts'}>
+            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'accounts' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><CreditCard className='mr-2' /> Accounts</div>
+            </Link>
+            <Link href='/main/reports'>
+            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'reports' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><BarChart2 className='mr-2' /> Reports</div>
+            </Link>
+            <Link href={'/main/records'}>
+            <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'records' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Archive className='mr-2' /> Records</div>
+            </Link>
           </div>
           <div className='bg-primaryBlack h-[calc(100vh-10rem)]' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
             {children}
