@@ -75,7 +75,6 @@ accountRouter.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, fu
         account,
         ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(index + 1)
     ];
-    console.log(newAccounts);
     yield db.updateOne({ username }, { $set: { accounts: newAccounts } });
     yield database_1.client.close();
     return res.json({ success: true });

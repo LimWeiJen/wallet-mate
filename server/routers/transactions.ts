@@ -1,5 +1,5 @@
 import express from 'express'
-import { client } from '../database'
+import { client, redisClient, redisGetAsync } from '../database'
 const transactionRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
@@ -42,11 +42,20 @@ transactionRouter.get('/', async (req, res) => {
   const username = req.body.decoded.username;
   if (!username) return res.json({ success: false, status: 500 });
 
+  redisClient.get(`${username} transaction`, (err, data) => {
+    if (err) throw err;
+    if (data) console.log(data);
+  });
+
+  console.log('yes?');
+
   await client.connect();
   const db = client.db("database").collection("users");
   const user: User | null = await db.findOne({username});
 
   if (!user) return res.json({ success: false, status: 500 });
+
+  await redisClient.setEx(`${username} transaction`, 600, JSON.stringify(user.transactions));
 
   return res.json({ success: true, transactions: user.transactions });
 })
