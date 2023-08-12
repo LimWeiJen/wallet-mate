@@ -50,19 +50,11 @@ transactionRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const username = req.body.decoded.username;
     if (!username)
         return res.json({ success: false, status: 500 });
-    database_1.redisClient.get(`${username} transaction`, (err, data) => {
-        if (err)
-            throw err;
-        if (data)
-            console.log(data);
-    });
-    console.log('yes?');
     yield database_1.client.connect();
     const db = database_1.client.db("database").collection("users");
     const user = yield db.findOne({ username });
     if (!user)
         return res.json({ success: false, status: 500 });
-    yield database_1.redisClient.setEx(`${username} transaction`, 600, JSON.stringify(user.transactions));
     return res.json({ success: true, transactions: user.transactions });
 }));
 transactionRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
