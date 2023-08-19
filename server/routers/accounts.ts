@@ -9,10 +9,10 @@ dotenv.config();
 
 accountRouter.use((req, res, next) => {
 	const token = req.headers['authorization']?.split(' ')[1];
-	if (!token) return res.json({ success: false, status: 401 });
+  	if (!token) return res.status(401).json({ message: 'invalid or missing token' });
 
 	jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
-		if (err) return res.json({success: false, status: 500});
+    		if (err) return res.status(500).json({ message: 'unable to verify user by the token given' });
 		req.body.decoded = decoded;
 		next()
 	})
@@ -20,14 +20,14 @@ accountRouter.use((req, res, next) => {
 
 accountRouter.get('/', async (req, res) => {
 	const username = req.body.decoded.username;
-	if (!username) return res.json({ success: false, status: 500 });
+  	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
 
 	await client.connect();
 	const db = client.db("database").collection("users");
 
 	const user: User | null = await db.findOne({ username });
 
-	if (!user) return res.json({ success: false, status: 500 });
+  	if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
 
 	const accounts = user.accounts;
 
@@ -40,7 +40,7 @@ accountRouter.post('/', async (req, res) => {
 	const account: Account = req.body.account;
 
 	if (!account) return res.json({ success: false, status: 400})
-	if (!username) return res.json({ success: false, status: 500 });
+  	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
 
 	await client.connect();
 	const db = client.db("database").collection("users");
@@ -56,15 +56,15 @@ accountRouter.post('/update', async (req, res) => {
 	const account: Account = req.body.account;
 	const index = req.body.index;
 
-	if (!account) return res.json({ success: false, status: 400})
-	if (!username) return res.json({ success: false, status: 500 });
+	if (!account) return res.status(400).json({ message: 'missing or invalid account object' }) 
+  	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
 	
 	await client.connect();
 	const db = client.db("database").collection("users");
 	
 	const user: User | null = await db.findOne({ username });
 	const accounts = user?.accounts;
-	if (!accounts) return res.json({ success: false, status: 500 });
+	if (!accounts) return res.status(500).json({ message: 'cannot find accounts object in user object' })
 	const newAccounts = [
 		...accounts?.slice(0, index),
 		account,
@@ -81,17 +81,17 @@ accountRouter.post('/update', async (req, res) => {
 accountRouter.delete('/', async (req, res) => {
 	const username = req.body.decoded.username;
 	const accountIndex = req.body.accountIndex;
-	if (!username) return res.json({ success: false, status: 500 });
+  	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
 
 	await client.connect();
 	const db = client.db("database").collection("users");
 	const user: User | null = await db.findOne({username});
 
-	if (!user) return res.json({ success: false, status: 500 });
+  	if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
 
 	let accounts = user.accounts;
 
-	if (!accounts) return res.json({ success: false, status: 400 });
+	if (!accounts) return res.status(500).json({ message: 'cannot find accounts object in user object' })
 
 	accounts.splice(accountIndex, 1);
 

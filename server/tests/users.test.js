@@ -19,8 +19,7 @@ describe('User API', () => {
     .post('/users/sign-up')
     .send({ username: 'testuser', name: 'Test User', password: 'password' });
 
-    expect(response.body.success).to.equal(false);
-    expect(response.body.status).to.equal(409);
+    expect(response.status).to.equal(409);
   });
 
   it('should sign in a user', async () => {
@@ -37,8 +36,7 @@ describe('User API', () => {
     .post('/users/sign-in')
     .send({ username: 'nonexistentuser', password: 'password' });
 
-    expect(response.body.success).to.equal(false);
-    expect(response.body.status).to.equal(404);
+    expect(response.status).to.equal(404);
   });
 
   it('should return 401 if password is incorrect', async () => {
@@ -46,8 +44,7 @@ describe('User API', () => {
     .post('/users/sign-in')
     .send({ username: 'testuser', password: 'wrongpassword' });
 
-    expect(response.body.success).to.equal(false);
-    expect(response.body.status).to.equal(401);
+    expect(response.status).to.equal(401);
   });
 
   it('should delete a user', async () => {

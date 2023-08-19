@@ -43,19 +43,19 @@ describe('Transaction API', () => {
     const res = await request(server)
       .post('/transactions')
       .send({ transaction: { amount: 100, type: 'credit' } });
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 
   it('should not get transactions without a token', async () => {
     const res = await request(server)
       .get('/transactions');
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 
   it('should not delete a transaction without a token', async () => {
     const res = await request(server)
       .delete('/transactions')
       .send({ transactionIndex: 0 });
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 });

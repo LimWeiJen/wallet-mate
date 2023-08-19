@@ -59,19 +59,19 @@ describe('Account API', () => {
     const res = await request(server)
       .post('/accounts')
       .send({ account: { name: 'test account', color: 'ffffff', accountType: 'e wallet', startingAmount: 100 } });
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 
   it('should not get accounts without a token', async () => {
     const res = await request(server)
       .get('/accounts');
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 
   it('should not delete an account without a token', async () => {
     const res = await request(server)
       .delete('/accounts')
       .send({ accountIndex: 0 });
-    expect(res.body.success).to.equal(false);
+    expect(res.status).to.equal(401);
   });
 });

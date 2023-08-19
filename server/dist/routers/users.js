@@ -28,8 +28,8 @@ userRouter.post('/sign-in', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.status(200).json({ success: true, token });
     }
     if (!user)
-        return res.json({ success: false, status: 404 });
-    return res.json({ success: false, status: 401 });
+        return res.status(404).json({ message: 'user not found' });
+    return res.status(401).json({ message: 'invalid credentials' });
 }));
 userRouter.post('/sign-up', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, name, password } = req.body;
@@ -43,7 +43,7 @@ userRouter.post('/sign-up', (req, res) => __awaiter(void 0, void 0, void 0, func
             duplicatedUsernames = true;
     });
     if (duplicatedUsernames)
-        return res.json({ success: false, status: 409 });
+        return res.status(409).json({ message: 'duplicated username' });
     yield db.collection("usernames").insertOne({ name: username });
     const newUser = {
         name,

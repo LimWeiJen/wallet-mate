@@ -23,10 +23,10 @@ transactionRouter.use((req, res, next) => {
     var _a;
     const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
     if (!token)
-        return res.json({ success: false, status: 401 });
+        return res.status(401).json({ message: 'invalid or missing token' });
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err)
-            return res.json({ success: false, status: 500 });
+            return res.status(500).json({ message: 'unable to verify user by the token given' });
         req.body.decoded = decoded;
         next();
     });
@@ -35,9 +35,9 @@ transactionRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, func
     const username = req.body.decoded.username;
     const transaction = req.body.transaction;
     if (!transaction)
-        return res.json({ success: false, status: 400 });
+        return res.status(400).json({ message: 'missing or invalid transaction object' });
     if (!username)
-        return res.json({ success: false, status: 500 });
+        return res.status(500).json({ message: 'unable to authorize user' });
     yield database_1.client.connect();
     const db = database_1.client.db("database").collection("users");
     yield db.updateOne({ username }, { $push: {
@@ -49,27 +49,27 @@ transactionRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, func
 transactionRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body.decoded.username;
     if (!username)
-        return res.json({ success: false, status: 500 });
+        return res.status(500).json({ message: 'unable to authorize user from the JWT token' });
     yield database_1.client.connect();
     const db = database_1.client.db("database").collection("users");
     const user = yield db.findOne({ username });
     if (!user)
-        return res.json({ success: false, status: 500 });
+        return res.status(500).json({ message: 'unable to locate user in the database' });
     return res.json({ success: true, transactions: user.transactions });
 }));
 transactionRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const username = req.body.decoded.username;
     const transactionIndex = req.body.transactionIndex;
     if (!username)
-        return res.json({ success: false, status: 500 });
+        return res.status(500).json({ message: 'unable to authorize user from the JWT token' });
     yield database_1.client.connect();
     const db = database_1.client.db("database").collection("users");
     const user = yield db.findOne({ username });
     if (!user)
-        return res.json({ success: false, status: 500 });
+        return res.status(500).json({ message: 'unable to locate user in the database' });
     let transactions = user.transactions;
     if (!transactions)
-        return res.json({ success: false, status: 400 });
+        return res.status(500).json({ message: 'cannot find transaction object in the user object' });
     transactions.splice(transactionIndex, 1);
     yield db.updateOne({ _id: user._id }, { $set: { transactions } });
     return res.json({ success: true });

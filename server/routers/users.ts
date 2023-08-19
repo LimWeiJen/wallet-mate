@@ -19,9 +19,9 @@ userRouter.post('/sign-in', async (req, res) => {
     return res.status(200).json({ success: true, token });
   }
 
-  if (!user) return res.json({ success: false, status: 404 });
+  if (!user) return res.status(404).json({ message: 'user not found' });
 
-  return res.json({ success: false, status: 401 });
+  return res.status(401).json({ message: 'invalid credentials' });
 })
 
 userRouter.post('/sign-up', async (req, res) => {
@@ -36,7 +36,7 @@ userRouter.post('/sign-up', async (req, res) => {
   usernames.forEach(uname => {
     if (uname.name === username) duplicatedUsernames = true;
   })
-  if (duplicatedUsernames) return res.json({ success: false, status: 409 });
+  if (duplicatedUsernames) return res.status(409).json({ message: 'duplicated username' });
 
   await db.collection("usernames").insertOne({ name: username });
 
