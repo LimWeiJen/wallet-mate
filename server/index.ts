@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { transactionRouter, userRouter, accountRouter } from './routers';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ const app: Express = express();
 const port = 3001;
 
 app.use(bodyParser());
+app.use(cors());
 
 app.use('/users', userRouter);
 app.use('/transactions', transactionRouter);
