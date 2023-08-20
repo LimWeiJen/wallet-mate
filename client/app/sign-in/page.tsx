@@ -9,8 +9,14 @@ const page = () => {
 	const signUpUsername = useRef<any>(null);
 	const signUpName = useRef<any>(null);
 	const signUpPassword = useRef<any>(null);
+	const [error, setError] = useState('');
 
 	const signIn = async () => {
+		if (!signInUsername.current!.value || !signInPassword.current!.value) {
+			setError('missing required fields');
+			return;
+		}
+
 		const res = await fetch('http://localhost:3001/users/sign-in', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
@@ -24,10 +30,17 @@ const page = () => {
 			const token = (await res.json())['token'];
 			window.localStorage.setItem('token', `Bearer ${token}`);
 			window.location.href = '/main/home'
+		} else {
+			setError('incorrect username or password');
 		}
 	}
 
 	const signUp = async () => {
+		if (!signUpUsername.current!.value || !signUpPassword.current!.value || !signUpName.current!.value) {
+			setError('missing required fields');
+			return;
+		}
+
 		const res = await fetch('http://localhost:3001/users/sign-up', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
@@ -42,7 +55,14 @@ const page = () => {
 			const token = (await res.json())['token'];
 			window.localStorage.setItem('token', `Bearer ${token}`);
 			window.location.href = '/main/home'
+		} else {
+			setError('username was already taken, please try another one');
 		}
+	}
+
+	const switchSignInOrSignUp = () => {
+		setSigningIn(!signingIn);
+		setError('')
 	}
 
 	return (
@@ -55,7 +75,8 @@ const page = () => {
 							<input ref={signInUsername} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Username' />
 							<input ref={signInPassword} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Password' />
 							<button onClick={signIn} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>Sign In</button>
-							<button className='underline text-xs' onClick={() => setSigningIn(false)}>Or Sign Up</button>
+							{error ? <div className='p-3 text-red-500'>{error}</div> : null}
+							<button className='underline text-xs' onClick={switchSignInOrSignUp}>Or Sign Up</button>
 						</div> : null }
 					</div>
 					<div className={`h-full w-full flex flex-col justify-center place-items-center ${signingIn ? 'bg-secondaryBlack' : ''}`}>
@@ -65,7 +86,8 @@ const page = () => {
 							<input ref={signUpName} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Name' />
 							<input ref={signUpPassword} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Password' />
 							<button onClick={signUp} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>Sign Up</button>
-							<button className='underline text-xs' onClick={() => setSigningIn(true)}>Or Sign In</button>
+							{error ? <div className='p-3 text-red-500'>{error}</div> : null}
+							<button className='underline text-xs' onClick={switchSignInOrSignUp}>Or Sign In</button>
 						</div> : null }
 					</div>
 				</div>

@@ -21,6 +21,11 @@ export default function RootLayout({
 }) {
   const pathname = usePathname().toString().replace('/main/', '');
 
+  const signOut = () => {
+    window.localStorage.removeItem('token');
+    window.location.href = '/'
+  }
+
   return (
     <div lang="en">
       <div>
@@ -31,7 +36,7 @@ export default function RootLayout({
           </div>
           <div className='flex justify-center align-middle'>
             <div title='add new post' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><Plus size={30} className='h-full text-primaryWhite' /></div>
-            <div title='sign out' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><LogOut size={30} className='h-full text-primaryWhite' /></div>
+            <div onClick={signOut} title='sign out' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><LogOut size={30} className='h-full text-primaryWhite' /></div>
           </div>
         </div>
       </div>

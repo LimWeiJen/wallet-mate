@@ -7,7 +7,6 @@ import { Transaction, User } from '../interfaces';
 
 dotenv.config();
 
-
 // middleware that is specific to this router
 transactionRouter.use((req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
