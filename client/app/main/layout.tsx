@@ -26,6 +26,11 @@ export default function RootLayout({
     window.location.href = '/'
   }
 
+  const addNewData = () => {
+    if (pathname === 'accounts') window.location.href = '/main/newAccount';
+    else window.location.href = '/main/newTransaction'
+  }
+
   return (
     <div lang="en">
       <div>
@@ -35,7 +40,7 @@ export default function RootLayout({
             <h1 className='text-primaryWhite font-thin opacity-80 text-sm'>@Lim</h1>
           </div>
           <div className='flex justify-center align-middle'>
-            <div title='add new post' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><Plus size={30} className='h-full text-primaryWhite' /></div>
+            <div onClick={addNewData} title='add new post' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><Plus size={30} className='h-full text-primaryWhite' /></div>
             <div onClick={signOut} title='sign out' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><LogOut size={30} className='h-full text-primaryWhite' /></div>
           </div>
         </div>
