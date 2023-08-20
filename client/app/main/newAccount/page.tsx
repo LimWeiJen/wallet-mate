@@ -10,11 +10,13 @@ const NewAccount = () => {
   const [error, setError] = useState('');
 
   const addAccount = async () => {
+    // Check if all required fields are filled
     if (!name.current.value || !color.current.value || !accountType.current.value || !startingAmount.current.value) {
       setError('missing required fields');
       return;
     }
 
+    // Send a POST request to the server with the new account data
     const res = await fetch('http://localhost:3001/accounts', {
       method: "POST",
       headers: {
@@ -31,8 +33,11 @@ const NewAccount = () => {
       })
     })
 
+    // If the request is successful, redirect to the main page
     if (res.ok) {
       window.location.href = '/main/accounts';
+    } else {
+      setError('Unexpected error occurred. Please wait for some time and try again.')
     }
   }
 

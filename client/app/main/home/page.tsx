@@ -9,6 +9,7 @@ const Home = () => {
   const [cashFlow, setCashFlow] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  // fetch all the required user data
   useEffect(() => {
     fetchTransactionData().then(transactionData => {
       fetchAccountsData().then(accountData => {
@@ -17,6 +18,10 @@ const Home = () => {
     });
   }, [])
 
+  /**
+   * fetch the user's transaction data from the server
+   * @returns [Transaction Object]
+   */
   const fetchTransactionData = async () => {
     const res = await fetch('http://localhost:3001/transactions', {
       method: 'GET',
@@ -29,6 +34,10 @@ const Home = () => {
     if (res.ok) return await res.json();
   }
 
+  /**
+   * fetch the user's account data from the server
+   * @returns [Account Object]
+   */
   const fetchAccountsData = async () => {
     const res = await fetch('http://localhost:3001/accounts', {
       method: 'GET',
@@ -41,14 +50,24 @@ const Home = () => {
     if (res.ok) return await res.json();
   }
 
+  /**
+   * takes in two arrays of transaction and account data and calculates the sum of income, sum of expenses, starting amount, and cash flow.
+   * @param transactionData the json result of transaction data from the server
+   * @param accountData the json result of account data from the server
+   */
   const modifyData = (transactionData: Array<Transaction>, accountData: Array<Account>) => {
+    // Initialize variables to store the sum of income, sum of expenses, and starting amount
     let sumOfIncome = 0, sumOfExpenses = 0, sumOfStartingAmount = 0;
+    
     transactionData.forEach(transaction => {
+      // If the transaction is an income, add its amount to the sumOfIncome variable
       if (transaction.type === 'income') sumOfIncome += transaction.amount!;
+      // If the transaction is an expense, add its amount to the sumOfExpenses variable
       else sumOfExpenses += transaction.amount!;
     })
     accountData.forEach(account => sumOfStartingAmount += account.startingAmount)
 
+    // Set the calculated values for each variable
     setIncome(sumOfIncome);
     setExpenses(sumOfExpenses);
     setCashFlow(sumOfIncome - sumOfExpenses);

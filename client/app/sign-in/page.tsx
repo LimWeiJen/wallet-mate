@@ -12,6 +12,7 @@ const page = () => {
 	const [error, setError] = useState('');
 
 	const signIn = async () => {
+    		// Check if all required fields are filled
 		if (!signInUsername.current!.value || !signInPassword.current!.value) {
 			setError('missing required fields');
 			return;
@@ -36,6 +37,7 @@ const page = () => {
 	}
 
 	const signUp = async () => {
+    		// Check if all required fields are filled
 		if (!signUpUsername.current!.value || !signUpPassword.current!.value || !signUpName.current!.value) {
 			setError('missing required fields');
 			return;
