@@ -55,17 +55,17 @@ const Home = () => {
    * @param transactionData the json result of transaction data from the server
    * @param accountData the json result of account data from the server
    */
-  const modifyData = (transactionData: Array<Transaction>, accountData: Array<Account>) => {
+  const modifyData = (transactionData: Array<any>, accountData: Array<any>) => {
     // Initialize variables to store the sum of income, sum of expenses, and starting amount
     let sumOfIncome = 0, sumOfExpenses = 0, sumOfStartingAmount = 0;
     
     transactionData.forEach(transaction => {
       // If the transaction is an income, add its amount to the sumOfIncome variable
-      if (transaction.type === 'income') sumOfIncome += transaction.amount!;
+      if (transaction.type === 'income') sumOfIncome += parseFloat(transaction.amount);
       // If the transaction is an expense, add its amount to the sumOfExpenses variable
-      else sumOfExpenses += transaction.amount!;
+      else sumOfExpenses += parseFloat(transaction.amount);
     })
-    accountData.forEach(account => sumOfStartingAmount += account.startingAmount)
+    accountData.forEach(account => sumOfStartingAmount += parseFloat(account.startingAmount))
 
     // Set the calculated values for each variable
     setIncome(sumOfIncome);

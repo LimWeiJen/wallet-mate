@@ -45,8 +45,7 @@ const NewAccount = () => {
     <div className='h-full flex flex-col justify-center place-items-center'>
       <input ref={name} className='p-3 w-11/12 font-bold bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Name' />
       <select ref={accountType} className='p-3 w-11/12 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223d3d1e] rounded-lg focus:outline-none focus:border-none'>
-        <option value="Account Type">Account Type</option>
-        <option value="General">General</option>
+        <option value="General Account">General Account</option>
         <option value="E Wallet">E Wallet</option>
         <option value="Cash">Cash</option>
         <option value="Current Account">Current Account</option>

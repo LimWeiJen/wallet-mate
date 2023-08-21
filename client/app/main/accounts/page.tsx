@@ -57,7 +57,7 @@ const Accounts = () => {
    * @param transactionData the json result of transaction data from the server
    * @param accountData the json result of account data from the server
    */
-  const modifyData = (transactionData: Array<Transaction>, accountData: Array<Account>) => {
+  const modifyData = (transactionData: Array<Transaction>, accountData: Array<any>) => {
     const newAccountData: Map<string | undefined, ClientAccount> = new Map();
 
     accountData.forEach(account => {
@@ -68,7 +68,7 @@ const Accounts = () => {
         expenses: 0,
         name: account.name,
         accountType: account.accountType,
-        startingAmount: account.startingAmount
+        startingAmount: parseFloat(account.startingAmount)
       }
 
       newAccountData.set(cAccount.name, cAccount);
@@ -97,7 +97,7 @@ const Accounts = () => {
   }
 
   return (
-    <div className='flex flex-col h-full place-items-center justify-center overflow-y-scroll pt-48'>
+    <div className='grid h-full place-items-center justify-center overflow-y-scroll'>
       {accounts.map(account =>
       <div className={`my-5 w-96 flex flex-col place-items-center rounded-lg`} style={{backgroundColor: account.color}}>
         <div className='px-10 py-10'>
