@@ -31,7 +31,7 @@ const Home = () => {
       },
     })
 
-    if (res.ok) return await res.json();
+    if (res.ok) return (await res.json())['transactions'];
   }
 
   /**
@@ -47,7 +47,7 @@ const Home = () => {
       },
     })
 
-    if (res.ok) return await res.json();
+    if (res.ok) return (await res.json())['accounts'];
   }
 
   /**
