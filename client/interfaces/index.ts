@@ -21,3 +21,8 @@ export interface User {
 	transactions?: Array<Transaction>
 	accounts?: Array<Account>
 }
+
+export interface ClientAccount extends Account {
+	income: number,
+	expenses: number,
+}
