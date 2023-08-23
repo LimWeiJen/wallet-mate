@@ -150,7 +150,10 @@ export const ContextProvider = ({children}: any) => {
 			labels: newIncomeCategory,
 			datasets: [{
 				label: "amount",
-				data: newIncomeCategoryAmount
+				data: newIncomeCategoryAmount,
+				backgroundColor: [
+					"#537294", "598C9E", "#538787", "#599E8A", "#53946F", "#57AB66", "#5CA152", "#84B854", "#9CAD50", "#C4BF51", "#BAAA4C", "#D1B04B"
+				]
 			}]
 		})
 
@@ -158,7 +161,10 @@ export const ContextProvider = ({children}: any) => {
 			labels: newExpensesCategory,
 			datasets: [{
 				label: "amount",
-				data: newExpensesCategoryAmount
+				data: newExpensesCategoryAmount,
+				backgroundColor: [
+					"#537294", "598C9E", "#538787", "#599E8A", "#53946F", "#57AB66", "#5CA152", "#84B854", "#9CAD50", "#C4BF51", "#BAAA4C", "#D1B04B"
+				]
 			}]
 		})
 
