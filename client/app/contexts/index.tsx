@@ -1,6 +1,7 @@
 'use client'
 
 import { ClientAccount, Transaction } from "@/interfaces";
+import { ChartData } from "chart.js";
 import { createContext, useEffect, useState } from "react";
 
 interface ContextInterface {
@@ -14,6 +15,8 @@ interface ContextInterface {
 	addTransaction: (amount: number, description: string, account: string, isIncome: boolean, category: string) => Promise<void>,
 	addAccount: (name: string, color: string, accountType: string, startingAmount: number) => Promise<void>,
 	error: string | boolean
+	incomeChartData: ChartData<"doughnut", number[], string>
+	expensesChartData: ChartData<"doughnut", number[], string>
 }
 
 export const context = createContext<ContextInterface | null>(null);
@@ -27,7 +30,22 @@ export const ContextProvider = ({children}: any) => {
 	const [accounts, setAccounts] = useState<Array<ClientAccount>>([]);
   	const [transactions, setTransactions] = useState<Array<Transaction>>([]);
   	const [error, setError] = useState<string | boolean>(false);
+	const [incomeChartData, setIncomeChartData] = useState<ChartData<"doughnut", number[], string>>({
+		labels: [],
+		datasets: [{
+			label: "amount",
+			data: []
+		}]
+	});
+	const [expensesChartData, setExpensesChartData] = useState<ChartData<"doughnut", number[], string>>({
+		labels: [],
+		datasets: [{
+			label: "amount",
+			data: []
+		}]
+	});
 
+	// fetch data from the server and update the state variables
 	useEffect(() => {
 		setError(false);
 		if (window.localStorage.getItem("token")) {
@@ -61,11 +79,22 @@ export const ContextProvider = ({children}: any) => {
 		return true;
 	}
 
+	/**
+	 * modify the data retrieved from the server and update the state variables
+	 * @param transactionData all the transaction data of the user
+	 * @param accountData all the account data of the user
+	 */
 	const _modifyData = (transactionData: Array<any>, accountData: Array<any>) => {
 		let sumOfIncome = 0, sumOfExpenses = 0, sumOfStartingAmount = 0;
     		const newAccountData: Map<string | undefined, ClientAccount> = new Map();
     		const newClientAccount: Array<ClientAccount> = [];
-		
+		const categoriesAndAmountIncome: Map<string | undefined, number> = new Map();
+		const categoriesAndAmountExpenses: Map<string | undefined, number> = new Map();
+		const newIncomeCategory: Array<string> = []
+		const newIncomeCategoryAmount: Array<number> = []
+		const newExpensesCategory: Array<string> = []
+		const newExpensesCategoryAmount: Array<number> = []
+
 		accountData.forEach(account => {
 			const cAccount: ClientAccount = {
 				color: account.color,
@@ -92,8 +121,12 @@ export const ContextProvider = ({children}: any) => {
 
 			if (transaction.type === 'expenses') {
 				acc.expenses += transaction.amount!;
+				if (categoriesAndAmountExpenses.get(transaction.category)) categoriesAndAmountExpenses.set(transaction.category,  categoriesAndAmountExpenses.get(transaction.category)! + transaction.amount!)
+				else categoriesAndAmountExpenses.set(transaction.category, transaction.amount!)
 			} else if (transaction.type === 'income') {
 				acc.income += transaction.amount!;
+				if (categoriesAndAmountIncome.get(transaction.category)) categoriesAndAmountIncome.set(transaction.category,  categoriesAndAmountIncome.get(transaction.category)! + transaction.amount!)
+				else categoriesAndAmountIncome.set(transaction.category, transaction.amount!)
 			}
 
 			newAccountData.set(acc.name, acc);		
@@ -101,6 +134,32 @@ export const ContextProvider = ({children}: any) => {
 
 		newAccountData.forEach((v, k) => {
 			newClientAccount.push(v);
+		})
+		
+		categoriesAndAmountExpenses.forEach((v, k) => {
+			newExpensesCategory.push(k!);
+			newExpensesCategoryAmount.push(v!)
+		})
+
+		categoriesAndAmountIncome.forEach((v, k) => {
+			newIncomeCategory.push(k!);
+			newIncomeCategoryAmount.push(v!)
+		})
+
+		setIncomeChartData({
+			labels: newIncomeCategory,
+			datasets: [{
+				label: "amount",
+				data: newIncomeCategoryAmount
+			}]
+		})
+
+		setExpensesChartData({
+			labels: newExpensesCategory,
+			datasets: [{
+				label: "amount",
+				data: newExpensesCategoryAmount
+			}]
 		})
 
 		setIncome(sumOfIncome);
@@ -111,6 +170,10 @@ export const ContextProvider = ({children}: any) => {
       		setTransactions(transactionData);
 	}
 
+	/**
+	 * @desc add a new transaction to the database
+	 * @returns void
+	 */
 	const addTransaction = async (amount: number, description: string, account: string, isIncome: boolean, category: string) => {
 		// Check if all required fields are filled
 		if (!amount || !description || !account || !category) {
@@ -136,7 +199,7 @@ export const ContextProvider = ({children}: any) => {
 			})
 		})
 
-	// If the request is successful, redirect to the main page
+		// If the request is successful, redirect to the main page
 		if (res.ok) {
 			window.location.href = '/main/home';
 		} else {
@@ -144,6 +207,10 @@ export const ContextProvider = ({children}: any) => {
 		}
 	}
 
+	/**
+	 * @desc add a new account to the database
+	 * @returns void
+	 */
 	const addAccount = async (name: string, color: string, accountType: string, startingAmount: number) => {
 		// Check if all required fields are filled
 		if (!name || !color || !accountType || !startingAmount) {
@@ -187,7 +254,9 @@ export const ContextProvider = ({children}: any) => {
 			transactions,
 			addTransaction,
 			addAccount,
-			error
+			error,
+			incomeChartData,
+			expensesChartData
 		}}>
 			{children}
 		</context.Provider>
