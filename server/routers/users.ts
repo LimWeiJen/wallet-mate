@@ -4,6 +4,7 @@ const userRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { User } from '../interfaces';
+import { sendEmailNotification } from '../utils';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ userRouter.post('/sign-in', async (req, res) => {
 
   return res.status(401).json({ message: 'invalid credentials' });
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -60,6 +62,7 @@ userRouter.post('/sign-up', async (req, res) => {
 
   return res.status(200).json({ success: true, token });
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })

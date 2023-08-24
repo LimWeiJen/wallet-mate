@@ -4,6 +4,7 @@ const accountRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { Account, User } from '../interfaces';
+import { sendEmailNotification } from '../utils';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ accountRouter.get('/', async (req, res) => {
 		await client.close();
 		return res.json({success: true, accounts});
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -55,6 +57,7 @@ accountRouter.post('/', async (req, res) => {
 	await client.close();
 	return res.json({success: true});
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -86,6 +89,7 @@ accountRouter.post('/update', async (req, res) => {
 
 	return res.json({success: true});
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -112,6 +116,7 @@ accountRouter.delete('/', async (req, res) => {
 
 	return res.json({ success: true });
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })

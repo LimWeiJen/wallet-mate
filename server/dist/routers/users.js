@@ -17,6 +17,7 @@ const database_1 = require("../database");
 const userRouter = express_1.default.Router();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const utils_1 = require("../utils");
 dotenv_1.default.config();
 userRouter.post('/sign-in', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -33,6 +34,7 @@ userRouter.post('/sign-in', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.status(401).json({ message: 'invalid credentials' });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -64,6 +66,7 @@ userRouter.post('/sign-up', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.status(200).json({ success: true, token });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));

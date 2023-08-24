@@ -4,6 +4,7 @@ const transactionRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { Transaction, User } from '../interfaces';
+import { sendEmailNotification } from '../utils';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ transactionRouter.post('/', async (req, res) => {
 
   return res.json({success: true});
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -55,6 +57,7 @@ transactionRouter.get('/', async (req, res) => {
 
   return res.json({ success: true, transactions: user.transactions });
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })
@@ -81,6 +84,7 @@ transactionRouter.delete('/', async (req, res) => {
 
   return res.json({ success: true });
 	} catch (error) {
+    sendEmailNotification(error);
 		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
 	}
 })

@@ -17,6 +17,7 @@ const database_1 = require("../database");
 const transactionRouter = express_1.default.Router();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const utils_1 = require("../utils");
 dotenv_1.default.config();
 // middleware that is specific to this router
 transactionRouter.use((req, res, next) => {
@@ -48,6 +49,7 @@ transactionRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.json({ success: true });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -64,6 +66,7 @@ transactionRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.json({ success: true, transactions: user.transactions });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -86,6 +89,7 @@ transactionRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, fu
         return res.json({ success: true });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));

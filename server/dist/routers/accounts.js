@@ -17,6 +17,7 @@ const database_1 = require("../database");
 const accountRouter = express_1.default.Router();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const utils_1 = require("../utils");
 dotenv_1.default.config();
 accountRouter.use((req, res, next) => {
     var _a;
@@ -45,6 +46,7 @@ accountRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
         return res.json({ success: true, accounts });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -63,6 +65,7 @@ accountRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.json({ success: true });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -91,6 +94,7 @@ accountRouter.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, fu
         return res.json({ success: true });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
@@ -113,6 +117,7 @@ accountRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, functi
         return res.json({ success: true });
     }
     catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
         return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
     }
 }));
