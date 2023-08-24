@@ -69,9 +69,9 @@ const page = () => {
 
 	return (
 		<div className='grid place-content-center h-screen'>
-			<div className='w-[calc(100vw-20rem)] rounded-lg h-[calc(100vh-10rem)]' >
-				<div className='bg-primaryBlack h-[calc(100vh-10rem)] flex w-full' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
-					<div className={`flex flex-col h-full w-full justify-center place-items-center ${signingIn ? '' : 'bg-secondaryBlack'}`}>
+			<div className='lg:w-[calc(100vw-20rem)] w-screen rounded-lg h-[calc(100vh-10rem)]' >
+				<div className='lg:bg-primaryBlack bg-[#0000008b] h-[calc(100vh-10rem)] lg:flex w-full' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
+					<div className={`lg:relative absolute top-0 left-0 flex flex-col h-full w-full justify-center place-items-center ${signingIn ? '' : 'lg:bg-secondaryBlack lg:block hidden'}`}>
 						{signingIn ?
 						<div className='flex flex-col h-full w-full justify-center place-items-center'>
 							<input ref={signInUsername} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Username' />
@@ -81,7 +81,7 @@ const page = () => {
 							<button className='underline text-xs' onClick={switchSignInOrSignUp}>Or Sign Up</button>
 						</div> : null }
 					</div>
-					<div className={`h-full w-full flex flex-col justify-center place-items-center ${signingIn ? 'bg-secondaryBlack' : ''}`}>
+					<div className={`lg:relative absolute top-0 left-0 h-full w-full flex flex-col justify-center place-items-center ${signingIn ? 'lg:bg-secondaryBlack lg:block hidden' : ''}`}>
 						{!signingIn ?
 						<div className='flex flex-col h-full w-full justify-center place-items-center'>
 							<input ref={signUpUsername} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Username (unique)' />

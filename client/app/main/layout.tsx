@@ -46,8 +46,8 @@ export default function RootLayout({
         </div>
       </div>
       <div className='grid place-content-center'>
-        <div className='w-[calc(100vw-20rem)] rounded-lg h-96' >
-          <div className='flex z-10'>
+        <div className='lg:w-[calc(100vw-20rem)] w-screen rounded-lg h-96' >
+          <div className='lg:flex z-10 hidden'>
             <Link href={'/main/home'}>
             <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'home' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Home className='mr-2' /> Home</div>
             </Link>
@@ -61,7 +61,21 @@ export default function RootLayout({
             <div className={`flex p-5 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'records' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Archive className='mr-2' /> Records</div>
             </Link>
           </div>
-          <div className='bg-primaryBlack h-[calc(100vh-10rem)]' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
+          <div className='flex z-10 lg:hidden absolute bottom-0 left-0 w-screen justify-evenly'>
+            <Link href={'/main/home'}>
+            <div className={`flex px-6 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'home' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Home className='mr-2' /></div>
+            </Link>
+            <Link href={'/main/accounts'}>
+            <div className={`flex px-6 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'accounts' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><CreditCard className='mr-2' /></div>
+            </Link>
+            <Link href='/main/reports'>
+            <div className={`flex px-6 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'reports' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><BarChart2 className='mr-2' /></div>
+            </Link>
+            <Link href={'/main/records'}>
+            <div className={`flex px-6 py-2 transition-all hover:-translate-y-1 hover:cursor-pointer rounded-t-lg shadow-lg ${pathname === 'records' ? 'bg-primaryGreen': 'bg-secondaryBlack opacity-50'}`}><Archive className='mr-2' /></div>
+            </Link>
+          </div>
+          <div className='lg:bg-primaryBlack bg-[#0000008b] h-[calc(100vh-10rem)]' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
             {children}
           </div>
         </div>

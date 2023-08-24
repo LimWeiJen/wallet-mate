@@ -12,16 +12,16 @@ const Reports = () => {
 
   return (
     <div className='overflow-y-scroll h-full p-5'>
-      <div className='text-4xl font-bold relative w-full h-60 mb-5'>
+      <div className='lg:text-4xl text-2xl font-bold relative w-full h-60 mb-5'>
         <h1>Income</h1>
         <Doughnut data={ctx?.incomeChartData!} width={"50%"} options={{maintainAspectRatio: false}}/>
       </div>
-      <div className='text-4xl font-bold relative w-full h-60 my-10'>
+      <div className='lg:text-4xl text-2xl font-bold relative w-full h-60 my-10'>
         <h1>Expenses</h1>
         <Doughnut data={ctx?.expensesChartData!} width={"50%"} options={{maintainAspectRatio: false}}/>
       </div>
       <div>
-        <h1 className='text-4xl font-bold text-center p-5'>Income And Expenses Report</h1>
+        <h1 className='lg:text-4xl text-2xl font-bold text-center p-5'>Income And Expenses Report</h1>
         <div className='bg-secondaryBlack p-5 my-2 text-xl'>
           <div className='flex justify-between font-bold'>
             <h1>Total Income</h1>

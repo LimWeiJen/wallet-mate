@@ -17,11 +17,11 @@ const NewTransaction = () => {
       <input ref={amount} className='p-3 w-11/12 font-bold text-2xl bg-primaryBlack bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-t-lg' type="number" placeholder='Amount' />
       <div className='h-1 w-11/12 gradient-1 mb-3'></div>
       <input ref={description} className='p-3 w-11/12 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223d3d1e] rounded-lg' type="text" placeholder="What's the income for?" />
-      <div className='flex justify-between w-11/12'>
-        <select ref={account} className='p-3 w-11/12 mr-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
+      <div className='lg:flex justify-between w-11/12'>
+        <select ref={account} className='p-3 lg:w-11/12 w-full lg:mr-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
           {ctx?.accounts.map(account => <option value={account.name}>{account.name}</option>)}
         </select>
-        <select ref={category} className='p-3 w-11/12 ml-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
+        <select ref={category} className='p-3 lg:w-11/12 w-full lg:ml-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
           <option value="Food & Drinks">Food & Drinks</option>
           <option value="Shopping">Shopping</option>
           <option value="Housing">Housing</option>
@@ -36,7 +36,7 @@ const NewTransaction = () => {
           <option value="Unknown">Unknown</option>
         </select>
       </div>
-      <div className='flex w-11/12 my-3 transition-all'>
+      <div className='flex lg:w-11/12 lg:justify-start justify-center my-3 transition-all'>
         <div className={`p-0.5 ${isIncome ? 'gradient-border-1' : ''} mr-6 transition-all hover:-translate-y-1`}>
           <button onClick={() => setIsIncome(true)} className={`p-3 px-12 bg-secondaryBlack ${isIncome ? '' : 'rounded-lg opacity-50'}`}>Income</button>
         </div>
