@@ -20,6 +20,7 @@ transactionRouter.use((req, res, next) => {
 })
 
 transactionRouter.post('/', async (req, res) => {
+	try {		
   const username = req.body.decoded.username;
   const transaction: Transaction = req.body.transaction;
 
@@ -36,9 +37,13 @@ transactionRouter.post('/', async (req, res) => {
   await client.close();
 
   return res.json({success: true});
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 transactionRouter.get('/', async (req, res) => {
+	try {		
   const username = req.body.decoded.username;
   if (!username) return res.status(500).json({ message: 'unable to authorize user from the JWT token' });
 
@@ -49,9 +54,13 @@ transactionRouter.get('/', async (req, res) => {
   if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
 
   return res.json({ success: true, transactions: user.transactions });
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 transactionRouter.delete('/', async (req, res) => {
+	try {		
   const username = req.body.decoded.username;
   const transactionIndex = req.body.transactionIndex;
   if (!username) return res.status(500).json({ message: 'unable to authorize user from the JWT token' });
@@ -71,6 +80,9 @@ transactionRouter.delete('/', async (req, res) => {
   await db.updateOne({_id: user._id}, {$set: {transactions}});
 
   return res.json({ success: true });
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 export default transactionRouter;

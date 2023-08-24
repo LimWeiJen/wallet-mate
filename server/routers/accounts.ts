@@ -19,23 +19,28 @@ accountRouter.use((req, res, next) => {
 })
 
 accountRouter.get('/', async (req, res) => {
-	const username = req.body.decoded.username;
-  	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
-
-	await client.connect();
-	const db = client.db("database").collection("users");
-
-	const user: User | null = await db.findOne({ username });
-
-  	if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
-
-	const accounts = user.accounts;
-
-	await client.close();
-	return res.json({success: true, accounts});
+	try {		
+		const username = req.body.decoded.username;
+		  if (!username) return res.status(500).json({ message: 'unable to authorize user' });
+	
+		await client.connect();
+		const db = client.db("database").collection("users");
+	
+		const user: User | null = await db.findOne({ username });
+	
+		  if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
+	
+		const accounts = user.accounts;
+	
+		await client.close();
+		return res.json({success: true, accounts});
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 accountRouter.post('/', async (req, res) => {
+	try {		
 	const username = req.body.decoded.username;
 	const account: Account = req.body.account;
 
@@ -49,9 +54,13 @@ accountRouter.post('/', async (req, res) => {
 
 	await client.close();
 	return res.json({success: true});
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 accountRouter.post('/update', async (req, res) => {
+	try {		
 	const username = req.body.decoded.username;
 	const account: Account = req.body.account;
 	const index = req.body.index;
@@ -76,9 +85,13 @@ accountRouter.post('/update', async (req, res) => {
 	await client.close();
 
 	return res.json({success: true});
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 accountRouter.delete('/', async (req, res) => {
+	try {		
 	const username = req.body.decoded.username;
 	const accountIndex = req.body.accountIndex;
   	if (!username) return res.status(500).json({ message: 'unable to authorize user' });
@@ -98,6 +111,9 @@ accountRouter.delete('/', async (req, res) => {
 	await db.updateOne({_id: user._id}, {$set: { accounts }});
 
 	return res.json({ success: true });
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 export default accountRouter

@@ -31,69 +31,89 @@ accountRouter.use((req, res, next) => {
     });
 });
 accountRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.decoded.username;
-    if (!username)
-        return res.status(500).json({ message: 'unable to authorize user' });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    const user = yield db.findOne({ username });
-    if (!user)
-        return res.status(500).json({ message: 'unable to locate user in the database' });
-    const accounts = user.accounts;
-    yield database_1.client.close();
-    return res.json({ success: true, accounts });
+    try {
+        const username = req.body.decoded.username;
+        if (!username)
+            return res.status(500).json({ message: 'unable to authorize user' });
+        yield database_1.client.connect();
+        const db = database_1.client.db("database").collection("users");
+        const user = yield db.findOne({ username });
+        if (!user)
+            return res.status(500).json({ message: 'unable to locate user in the database' });
+        const accounts = user.accounts;
+        yield database_1.client.close();
+        return res.json({ success: true, accounts });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
+    }
 }));
 accountRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.decoded.username;
-    const account = req.body.account;
-    if (!account)
-        return res.json({ success: false, status: 400 });
-    if (!username)
-        return res.status(500).json({ message: 'unable to authorize user' });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    yield db.updateOne({ username }, { $push: { accounts: account } });
-    yield database_1.client.close();
-    return res.json({ success: true });
+    try {
+        const username = req.body.decoded.username;
+        const account = req.body.account;
+        if (!account)
+            return res.json({ success: false, status: 400 });
+        if (!username)
+            return res.status(500).json({ message: 'unable to authorize user' });
+        yield database_1.client.connect();
+        const db = database_1.client.db("database").collection("users");
+        yield db.updateOne({ username }, { $push: { accounts: account } });
+        yield database_1.client.close();
+        return res.json({ success: true });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
+    }
 }));
 accountRouter.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.decoded.username;
-    const account = req.body.account;
-    const index = req.body.index;
-    if (!account)
-        return res.status(400).json({ message: 'missing or invalid account object' });
-    if (!username)
-        return res.status(500).json({ message: 'unable to authorize user' });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    const user = yield db.findOne({ username });
-    const accounts = user === null || user === void 0 ? void 0 : user.accounts;
-    if (!accounts)
-        return res.status(500).json({ message: 'cannot find accounts object in user object' });
-    const newAccounts = [
-        ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(0, index),
-        account,
-        ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(index + 1)
-    ];
-    yield db.updateOne({ username }, { $set: { accounts: newAccounts } });
-    yield database_1.client.close();
-    return res.json({ success: true });
+    try {
+        const username = req.body.decoded.username;
+        const account = req.body.account;
+        const index = req.body.index;
+        if (!account)
+            return res.status(400).json({ message: 'missing or invalid account object' });
+        if (!username)
+            return res.status(500).json({ message: 'unable to authorize user' });
+        yield database_1.client.connect();
+        const db = database_1.client.db("database").collection("users");
+        const user = yield db.findOne({ username });
+        const accounts = user === null || user === void 0 ? void 0 : user.accounts;
+        if (!accounts)
+            return res.status(500).json({ message: 'cannot find accounts object in user object' });
+        const newAccounts = [
+            ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(0, index),
+            account,
+            ...accounts === null || accounts === void 0 ? void 0 : accounts.slice(index + 1)
+        ];
+        yield db.updateOne({ username }, { $set: { accounts: newAccounts } });
+        yield database_1.client.close();
+        return res.json({ success: true });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
+    }
 }));
 accountRouter.delete('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.decoded.username;
-    const accountIndex = req.body.accountIndex;
-    if (!username)
-        return res.status(500).json({ message: 'unable to authorize user' });
-    yield database_1.client.connect();
-    const db = database_1.client.db("database").collection("users");
-    const user = yield db.findOne({ username });
-    if (!user)
-        return res.status(500).json({ message: 'unable to locate user in the database' });
-    let accounts = user.accounts;
-    if (!accounts)
-        return res.status(500).json({ message: 'cannot find accounts object in user object' });
-    accounts.splice(accountIndex, 1);
-    yield db.updateOne({ _id: user._id }, { $set: { accounts } });
-    return res.json({ success: true });
+    try {
+        const username = req.body.decoded.username;
+        const accountIndex = req.body.accountIndex;
+        if (!username)
+            return res.status(500).json({ message: 'unable to authorize user' });
+        yield database_1.client.connect();
+        const db = database_1.client.db("database").collection("users");
+        const user = yield db.findOne({ username });
+        if (!user)
+            return res.status(500).json({ message: 'unable to locate user in the database' });
+        let accounts = user.accounts;
+        if (!accounts)
+            return res.status(500).json({ message: 'cannot find accounts object in user object' });
+        accounts.splice(accountIndex, 1);
+        yield db.updateOne({ _id: user._id }, { $set: { accounts } });
+        return res.json({ success: true });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
+    }
 }));
 exports.default = accountRouter;

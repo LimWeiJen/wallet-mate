@@ -8,6 +8,7 @@ import { User } from '../interfaces';
 dotenv.config();
 
 userRouter.post('/sign-in', async (req, res) => {
+	try {		
   const { username, password } = req.body;
 
   await client.connect();
@@ -22,9 +23,13 @@ userRouter.post('/sign-in', async (req, res) => {
   if (!user) return res.status(404).json({ message: 'user not found' });
 
   return res.status(401).json({ message: 'invalid credentials' });
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 userRouter.post('/sign-up', async (req, res) => {
+	try {		
   const { username, name, password } = req.body;
 
   await client.connect();
@@ -54,9 +59,13 @@ userRouter.post('/sign-up', async (req, res) => {
   const token = jwt.sign({username}, process.env.JWT_SECRET!);
 
   return res.status(200).json({ success: true, token });
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 userRouter.delete('/', async (req, res) => {
+	try {		
   const { username, password } = req.body;
 
   await client.connect();
@@ -65,6 +74,9 @@ userRouter.delete('/', async (req, res) => {
   await client.db("database").collection("usernames").deleteOne({ name: username });
 
   return res.json(({ success: true }));
+	} catch (error) {
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
 })
 
 export default userRouter;
