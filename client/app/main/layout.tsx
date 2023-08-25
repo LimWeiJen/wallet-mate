@@ -1,7 +1,6 @@
 'use client'
 
 import '../globals.css'
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -10,11 +9,6 @@ import { Plus, LogOut, Home, CreditCard, BarChart2, Archive } from 'react-feathe
 import { context } from '../contexts'
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Wallet Mate',
-  description: 'Personal Expense Tracker',
-}
 
 export default function RootLayout({
   children,

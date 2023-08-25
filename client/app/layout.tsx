@@ -5,6 +5,18 @@ import { ContextProvider } from './contexts'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const metadata: Metadata = {
+  title: 'Wallet Mate',
+  description: 'Personal Expense Tracker',
+  icons: {
+    icon: {
+      url: '/favicon.ico',
+      type: 'image/ico'
+    },
+    shortcut: {url: '/favicon.ico', type: 'image/ico'}
+  }
+}
+
 export default function RootLayout({
   children,
 }: {
