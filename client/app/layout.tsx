@@ -8,6 +8,13 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Wallet Mate',
   description: 'Personal Expense Tracker',
+  icons: {
+    icon: {
+      url: '/favicon.ico',
+      type: 'image/ico'
+    },
+    shortcut: {url: '/favicon.ico', type: 'image/ico'}
+  }
 }
 
 export default function RootLayout({
@@ -19,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <ContextProvider>
         <body className={inter.className}>
+          <link rel="icon" href="/favicon.ico" sizes="any" />
           {children}
           <div>
             <div className="circle gradient-1 top-0" style={{animation: 'circleAnimation1 10s infinite ease-in-out'}}></div>
