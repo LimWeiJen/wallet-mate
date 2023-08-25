@@ -18,7 +18,7 @@ const page = () => {
 			return;
 		}
 
-		const res = await fetch('http://localhost:3001/users/sign-in', {
+		const res = await fetch('https://wallet-mate-server.onrender.com/users/sign-in', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
@@ -43,7 +43,7 @@ const page = () => {
 			return;
 		}
 
-		const res = await fetch('http://localhost:3001/users/sign-up', {
+		const res = await fetch('https://wallet-mate-server.onrender.com/users/sign-up', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({

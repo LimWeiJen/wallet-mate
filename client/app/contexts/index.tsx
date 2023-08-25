@@ -56,7 +56,7 @@ export const ContextProvider = ({children}: any) => {
 	}, [])
 
 	const fetchData = async () => {
-		const transactionRes = await fetch('http://localhost:3001/transactions', {
+		const transactionRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/transactions`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export const ContextProvider = ({children}: any) => {
 		})
 		const transactionData = (await transactionRes.json())['transactions']
 
-		const accountsRes = await fetch('http://localhost:3001/accounts', {
+		const accountsRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/accounts`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ export const ContextProvider = ({children}: any) => {
 		}
 
 		// Send a POST request to the server with the new account data
-		const res = await fetch('http://localhost:3001/transactions', {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/transactions`, {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ export const ContextProvider = ({children}: any) => {
 		}
 
 		// Send a POST request to the server with the new account data
-		const res = await fetch('http://localhost:3001/accounts', {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/accounts`, {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json',

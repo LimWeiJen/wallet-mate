@@ -14,8 +14,8 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmailNotification = (error: unknown) => {
 	const mailOptions = {
-	  from: 'limweijen96@gmail.com',
-	  to: 'limweijen43@gmail.com',
+	  from: 'limweijen43@gmail.com',
+	  to: 'limweijen96@gmail.com',
 	  subject: 'Server Down Notification',
 	  text: error!,
 	};

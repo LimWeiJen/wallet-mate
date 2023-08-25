@@ -5,7 +5,9 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useContext } from 'react'
 import { Plus, LogOut, Home, CreditCard, BarChart2, Archive } from 'react-feather'
+import { context } from '../contexts'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname().toString().replace('/main/', '');
+  const ctx = useContext(context);
 
   const signOut = () => {
     window.localStorage.removeItem('token');
@@ -76,7 +79,7 @@ export default function RootLayout({
             </Link>
           </div>
           <div className='lg:bg-primaryBlack bg-[#0000008b] h-[calc(100vh-10rem)]' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
-            {children}
+            {ctx?.isBusy ? null : children}
           </div>
         </div>
       </div>
