@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-const page = () => {
+const Page = () => {
 	const [signingIn, setSigningIn] = useState(true);
 	const signInUsername = useRef<any>(null);
 	const signInPassword = useRef<any>(null);
@@ -10,6 +10,10 @@ const page = () => {
 	const signUpName = useRef<any>(null);
 	const signUpPassword = useRef<any>(null);
 	const [error, setError] = useState('');
+
+	useEffect(() => {
+		if (window.localStorage.getItem('token')) window.location.href = '/main/home'
+	}, [])
 
 	const signIn = async () => {
     		// Check if all required fields are filled
@@ -98,4 +102,4 @@ const page = () => {
 	)
 }
 
-export default page
+export default Page

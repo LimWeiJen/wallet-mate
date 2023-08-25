@@ -9,7 +9,7 @@ const Accounts = () => {
   return (
     <div className='grid h-full place-items-center justify-center overflow-y-scroll'>
       {ctx?.accounts.map(account =>
-      <div className={`my-5 lg:w-96 w-72 flex flex-col place-items-center rounded-lg`} style={{backgroundColor: account.color}}>
+      <div key={account.name} className={`my-5 lg:w-96 w-72 flex flex-col place-items-center rounded-lg`} style={{backgroundColor: account.color}}>
         <div className='px-10 lg:py-10 py-8'>
           <div>{account.name}</div>
           <div className='text-4xl font-bold'>${account.startingAmount + account.income - account.expenses}</div>

@@ -19,7 +19,7 @@ const NewTransaction = () => {
       <input ref={description} className='p-3 w-11/12 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223d3d1e] rounded-lg' type="text" placeholder="What's the income for?" />
       <div className='lg:flex justify-between w-11/12'>
         <select ref={account} className='p-3 lg:w-11/12 w-full lg:mr-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
-          {ctx?.accounts.map(account => <option value={account.name}>{account.name}</option>)}
+          {ctx?.accounts.map(account => <option key={account.name} value={account.name}>{account.name}</option>)}
         </select>
         <select ref={category} className='p-3 lg:w-11/12 w-full lg:ml-4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#1edfdf1f] rounded-lg focus:outline-none focus:border-none'>
           <option value="Food & Drinks">Food & Drinks</option>

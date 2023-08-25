@@ -1,13 +1,6 @@
-'use client'
-
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function Home() {
-  useEffect(() => {
-    if (window.localStorage.getItem('token')) window.location.href = '/main/home'
-  }, [])
-
   return (
     <main className="bg-bg grid place-content-center h-screen place-items-center">
      <h1 className='text-7xl font-bold text-center my-2'>

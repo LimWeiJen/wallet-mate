@@ -28,7 +28,7 @@ const Reports = () => {
             <p>${ctx?.income}</p>
           </div>
           {ctx?.incomeChartData!.datasets[0].data.map((v, i) => 
-            <div className='flex justify-between opacity-50'>
+            <div key={i} className='flex justify-between opacity-50'>
               <h1>{ctx?.incomeChartData!.labels![i]}</h1>
               <p>${v}</p>
             </div>
@@ -40,7 +40,7 @@ const Reports = () => {
             <p>${ctx?.expenses}</p>
           </div>
           {ctx?.expensesChartData!.datasets[0].data.map((v, i) => 
-            <div className='flex justify-between opacity-50'>
+            <div key={i} className='flex justify-between opacity-50'>
               <h1>{ctx?.expensesChartData!.labels![i]}</h1>
               <p>${v}</p>
             </div>
