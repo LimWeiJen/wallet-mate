@@ -32,6 +32,23 @@ transactionRouter.use((req, res, next) => {
         next();
     });
 });
+transactionRouter.get('/username', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const username = req.body.decoded.username;
+        if (!username)
+            return res.status(500).json({ message: 'unable to authorize user' });
+        yield database_1.client.connect();
+        const db = database_1.client.db("database").collection("users");
+        const user = yield db.findOne({ username });
+        if (!user)
+            return res.status(500).json({ message: 'unable to locate user in the database' });
+        return res.json({ success: true, name: user.name, username: user.username });
+    }
+    catch (error) {
+        (0, utils_1.sendEmailNotification)(error);
+        return res.status(500).json({ message: 'unexpected internal server error', fullError: error });
+    }
+}));
 transactionRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const username = req.body.decoded.username;

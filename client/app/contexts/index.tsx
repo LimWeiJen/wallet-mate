@@ -17,6 +17,8 @@ interface ContextInterface {
 	error: string | boolean
 	incomeChartData: ChartData<"doughnut", number[], string>
 	expensesChartData: ChartData<"doughnut", number[], string>
+	name: string,
+	username: string
 }
 
 export const context = createContext<ContextInterface | null>(null);
@@ -44,6 +46,8 @@ export const ContextProvider = ({children}: any) => {
 			data: []
 		}]
 	});
+	const [name, setName] = useState('');
+	const [username, setUsername] = useState('');
 
 	// fetch data from the server and update the state variables
 	useEffect(() => {
@@ -73,6 +77,18 @@ export const ContextProvider = ({children}: any) => {
 			},
 		})
 		const accountData = (await accountsRes.json())['accounts'];
+
+		const userRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/transactions/username`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': window.localStorage.getItem('token')!
+			},
+		})
+		const userData = (await userRes.json());
+
+		setName(userData.name);
+		setUsername(userData.username);
 
 		_modifyData(transactionData, accountData);
 
@@ -120,13 +136,13 @@ export const ContextProvider = ({children}: any) => {
 			if (!acc) return;
 
 			if (transaction.type === 'expenses') {
-				acc.expenses += transaction.amount!;
-				if (categoriesAndAmountExpenses.get(transaction.category)) categoriesAndAmountExpenses.set(transaction.category,  categoriesAndAmountExpenses.get(transaction.category)! + transaction.amount!)
-				else categoriesAndAmountExpenses.set(transaction.category, transaction.amount!)
+				acc.expenses += parseFloat(transaction.amount!);
+				if (categoriesAndAmountExpenses.get(transaction.category)) categoriesAndAmountExpenses.set(transaction.category,  categoriesAndAmountExpenses.get(transaction.category)! + parseFloat(transaction.amount!))
+				else categoriesAndAmountExpenses.set(transaction.category, parseFloat(transaction.amount!))
 			} else if (transaction.type === 'income') {
-				acc.income += transaction.amount!;
-				if (categoriesAndAmountIncome.get(transaction.category)) categoriesAndAmountIncome.set(transaction.category,  categoriesAndAmountIncome.get(transaction.category)! + transaction.amount!)
-				else categoriesAndAmountIncome.set(transaction.category, transaction.amount!)
+				acc.income += parseFloat(transaction.amount!);
+				if (categoriesAndAmountIncome.get(transaction.category)) categoriesAndAmountIncome.set(transaction.category,  categoriesAndAmountIncome.get(transaction.category)! + parseFloat(transaction.amount!))
+				else categoriesAndAmountIncome.set(transaction.category, parseFloat(transaction.amount!))
 			}
 
 			newAccountData.set(acc.name, acc);		
@@ -262,7 +278,9 @@ export const ContextProvider = ({children}: any) => {
 			addAccount,
 			error,
 			incomeChartData,
-			expensesChartData
+			expensesChartData,
+			name,
+			username
 		}}>
 			{children}
 		</context.Provider>

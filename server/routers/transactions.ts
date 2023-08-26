@@ -20,6 +20,23 @@ transactionRouter.use((req, res, next) => {
   })
 })
 
+transactionRouter.get('/username', async (req, res) => {
+	try {		
+  const username = req.body.decoded.username;
+  if (!username) return res.status(500).json({ message: 'unable to authorize user' });
+  await client.connect();
+  const db = client.db("database").collection("users");
+  const user: User | null = await db.findOne({username});
+
+  if (!user) return res.status(500).json({ message: 'unable to locate user in the database' });
+
+  return res.json({ success: true, name: user.name, username: user.username });
+	} catch (error) {
+    sendEmailNotification(error);
+		return res.status(500).json({ message: 'unexpected internal server error', fullError: error })
+	}
+})
+
 transactionRouter.post('/', async (req, res) => {
 	try {		
   const username = req.body.decoded.username;

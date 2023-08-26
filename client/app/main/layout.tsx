@@ -33,8 +33,8 @@ export default function RootLayout({
       <div>
         <div className='flex lg:justify-center justify-between m-5'>
           <div className='mx-1'>
-            <h1 className='text-primaryWhite font-bold text-xl'>Lim</h1>
-            <h1 className='text-primaryWhite font-thin opacity-80 text-sm'>@Lim</h1>
+            <h1 className='text-primaryWhite font-bold text-xl'>{ctx?.name}</h1>
+            <h1 className='text-primaryWhite font-thin opacity-80 text-sm'>@{ctx?.username}</h1>
           </div>
           <div className='flex justify-center align-middle'>
             <div onClick={addNewData} title='add new post' className='mx-1 transition-all hover:scale-110 hover:cursor-pointer hover:rotate-3'><Plus size={30} className='h-full text-primaryWhite' /></div>
