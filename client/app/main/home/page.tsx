@@ -19,7 +19,7 @@ const Home = () => {
           <div className='font-bold'>-${ctx?.expenses}</div>
         </div>
       </div>
-      <div className='text-2xl'>Cash Flow: <span className='text-primaryGreen'>${ctx?.cashFlow}</span></div>
+      <div className='text-2xl'>Cash Flow: <span className={`${ctx?.cashFlow! > 0 ? 'text-primaryGreen' : ''}`}>${ctx?.cashFlow}</span></div>
     </div>
   )
 }

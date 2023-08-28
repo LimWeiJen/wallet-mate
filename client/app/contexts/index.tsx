@@ -184,10 +184,10 @@ export const ContextProvider = ({children}: any) => {
 			}]
 		})
 
-		setIncome(sumOfIncome);
-		setExpenses(sumOfExpenses);
-		setCashFlow(sumOfIncome - sumOfExpenses);
-		setTotalAmount(sumOfStartingAmount + sumOfIncome - sumOfExpenses);
+		setIncome(Number(sumOfIncome.toFixed(2)));
+		setExpenses(Number(sumOfExpenses.toFixed(2)));
+		setCashFlow(Number((sumOfIncome -sumOfExpenses).toFixed(2)));
+		setTotalAmount(Number((sumOfStartingAmount + sumOfIncome - sumOfExpenses).toFixed(2)));
     		setAccounts(newClientAccount);
       		setTransactions(transactionData);
 	}
