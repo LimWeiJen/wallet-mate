@@ -1,16 +1,27 @@
 'use client'
 
 import { context } from '@/app/contexts';
-import { Account } from '@/interfaces';
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 
 const NewTransaction = () => {
   const [isIncome, setIsIncome] = useState(true);
+  const [isloading, setisloading] = useState(false);
   const amount = useRef<any>(null);
   const description = useRef<any>(null);
   const account = useRef<any>(null);
   const category = useRef<any>(null);
   const ctx = useContext(context);
+
+  const addTransaction = () => {
+    setisloading(true);
+    ctx?.addTransaction(
+      amount.current.value,
+      description.current.value,
+      account.current.value,
+      isIncome,
+      category.current.value
+    )
+  }
 
   return (
     <div className='h-full flex flex-col justify-center place-items-center'>
@@ -45,13 +56,7 @@ const NewTransaction = () => {
         </div>
       </div>
       {ctx?.error ? <div className='p-3 text-red-500'>{ctx?.error}</div> : null}
-      <button onClick={() => ctx?.addTransaction(
-        amount.current.value,
-        description.current.value,
-        account.current.value,
-        isIncome,
-        category.current.value
-      )} className='gradient-1 w-11/12 my-3 p-3 text-2xl font-bold rounded-lg transition-all hover:rotate-1 hover:scale-105'>Confirm</button>
+      <button onClick={addTransaction} className='gradient-1 w-11/12 my-3 p-3 text-2xl font-bold rounded-lg transition-all hover:rotate-1 hover:scale-105'>{isloading ? <div className='h-full flex flex-col justify-center place-items-center'><span className="loader"></span></div> : <div>Add Transaction</div>}</button>
     </div>
   )
 }

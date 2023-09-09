@@ -73,7 +73,7 @@ export default function RootLayout({
             </Link>
           </div>
           <div className='lg:bg-primaryBlack bg-[#0000008b] h-[calc(100vh-10rem)]' style={{boxShadow: '0px 0px 20px 20px rgba(0, 0, 0, 0.25);'}}>
-            {ctx?.isBusy ? null : children}
+            {ctx?.isBusy ? <div className='h-full flex flex-col justify-center place-items-center'><span className="loader"></span></div> : children}
           </div>
         </div>
       </div>

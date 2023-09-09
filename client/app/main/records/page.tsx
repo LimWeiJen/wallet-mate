@@ -8,7 +8,7 @@ const Records = () => {
 
   return (
     <div className='overflow-y-scroll h-full'>
-      {ctx?.transactions.map(transaction => 
+      {ctx?.transactions.reverse().map(transaction => 
       <div key={transaction.description} className='flex justify-between border-primaryGreen m-5 border-2 p-5 bg-secondaryBlack rounded-lg'>
         <div>
           <div className='text-4xl font-bold'>{transaction.description}</div>

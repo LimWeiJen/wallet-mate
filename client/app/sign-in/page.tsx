@@ -10,17 +10,20 @@ const Page = () => {
 	const signUpName = useRef<any>(null);
 	const signUpPassword = useRef<any>(null);
 	const [error, setError] = useState('');
+  const [isloading, setisloading] = useState(false);
 
 	useEffect(() => {
 		if (window.localStorage.getItem('token')) window.location.href = '/main/home'
 	}, [])
 
 	const signIn = async () => {
-    		// Check if all required fields are filled
+    // Check if all required fields are filled
 		if (!signInUsername.current!.value || !signInPassword.current!.value) {
 			setError('missing required fields');
 			return;
 		}
+
+    setisloading(true);
 
 		const res = await fetch('https://wallet-mate-server.onrender.com/users/sign-in', {
 			method: 'POST',
@@ -36,16 +39,19 @@ const Page = () => {
 			window.localStorage.setItem('token', `Bearer ${token}`);
 			window.location.href = '/main/home'
 		} else {
+      setisloading(false);
 			setError('incorrect username or password');
 		}
 	}
 
 	const signUp = async () => {
-    		// Check if all required fields are filled
+    // Check if all required fields are filled
 		if (!signUpUsername.current!.value || !signUpPassword.current!.value || !signUpName.current!.value) {
 			setError('missing required fields');
 			return;
 		}
+
+    setisloading(true);
 
 		const res = await fetch('https://wallet-mate-server.onrender.com/users/sign-up', {
 			method: 'POST',
@@ -62,6 +68,7 @@ const Page = () => {
 			window.localStorage.setItem('token', `Bearer ${token}`);
 			window.location.href = '/main/home'
 		} else {
+      setisloading(false);
 			setError('username was already taken, please try another one');
 		}
 	}
@@ -80,7 +87,7 @@ const Page = () => {
 						<div className='flex flex-col h-full w-full justify-center place-items-center'>
 							<input ref={signInUsername} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Username' />
 							<input ref={signInPassword} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Password' />
-							<button onClick={signIn} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>Sign In</button>
+							<button onClick={signIn} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>{isloading ? <div className='h-full flex flex-col justify-center place-items-center'><span className="loader"></span></div> : <div>Sign In</div>}</button>
 							{error ? <div className='p-3 text-red-500'>{error}</div> : null}
 							<button className='underline text-xs' onClick={switchSignInOrSignUp}>Or Sign Up</button>
 						</div> : null }
@@ -91,7 +98,7 @@ const Page = () => {
 							<input ref={signUpUsername} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Username (unique)' />
 							<input ref={signUpName} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Name' />
 							<input ref={signUpPassword} className='p-3 w-3/4 bg-primaryBlack my-3 bg-gradient-to-r from-secondaryGreen to-[#223D3D1e] rounded-lg' type="text" placeholder='Password' />
-							<button onClick={signUp} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>Sign Up</button>
+							<button onClick={signUp} className='text-xl text-center transition-all gradient-1 py-2 font-bold rounded-lg w-3/4 my-4 hover:rotate-1 hover:scale-105'>{ isloading ? <div className='h-full flex flex-col justify-center place-items-center'><span className="loader"></span></div> : <div>Sign Up</div>}</button>
 							{error ? <div className='p-3 text-red-500'>{error}</div> : null}
 							<button className='underline text-xs' onClick={switchSignInOrSignUp}>Or Sign In</button>
 						</div> : null }
